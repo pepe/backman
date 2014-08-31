@@ -1,10 +1,12 @@
 ENV['RACK_ENV'] = 'test' unless defined?(RACK_ENV)
 
-require 'bundler/setup'
 require 'rack/test'
+require 'dotenv'
 
+# Require application code
 require File.expand_path(File.dirname(__FILE__) + '/../lib/backman/api')
 
+# Configure rspec
 RSpec.configure do |config|
   # TODO: include only for web tests
   config.include Rack::Test::Methods
@@ -31,10 +33,10 @@ RSpec.configure do |config|
   end
 end
 
-ENV['client_id'] = 'abcd'
-ENV['state'] = 'abcd'
-ENV['redirect_uri'] =  'http://backman.io/authorized'
+# set up ENV
+Dotenv::Environment.new('spec/test.env')
 
+# app for the rack-test
 def app
   Backman::API
 end
